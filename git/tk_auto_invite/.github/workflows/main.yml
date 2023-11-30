@@ -1,0 +1,31 @@
+name: Python application
+
+on: [push]
+
+jobs:
+  build-windows-exe:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+
+    - name: Build .exe with PyInstaller
+      run: |
+        pyinstaller --onefile tiktok_auto_invite.py
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: main-application
+        path: dist/tiktok_auto_invite.exe
